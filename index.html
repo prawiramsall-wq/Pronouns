@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Irregular Verbs in Simple Past Quiz</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:#0a66c2;
+}
+
+.subtitle{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+line-height:1.6;
+}
+
+.quiz-card{
+background:white;
+padding:20px;
+margin-bottom:15px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.question{
+font-size:18px;
+font-weight:bold;
+margin-bottom:12px;
+}
+
+.option{
+display:block;
+padding:10px;
+margin-bottom:8px;
+border:1px solid #ddd;
+border-radius:10px;
+cursor:pointer;
+}
+
+.option:hover{
+background:#eef5ff;
+}
+
+.answer{
+display:none;
+margin-top:10px;
+font-weight:bold;
+}
+
+.correct{
+color:green;
+}
+
+.wrong{
+color:red;
+}
+
+button{
+display:block;
+margin:25px auto;
+padding:14px 30px;
+border:none;
+border-radius:10px;
+background:#0a66c2;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#084d93;
+}
+
+.result{
+display:none;
+background:white;
+padding:25px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.score{
+font-size:45px;
+font-weight:bold;
+color:#0a66c2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Irregular Verbs in Simple Past Quiz</h1>
+<p class="subtitle">Choose the correct irregular verb form.</p>
+
+<div class="card">
+<h3>📘 Personal Pronouns</h3>
+
+<p>
+Complete the exercises below to practice using personal pronouns. Personal pronouns are used in place of nouns. For example, consider the following sentence: “The woman is pretty.” We can write the same sentence using a pronoun: “She is pretty.”
+</p>
+
+<p>
+Personal pronouns can be difficult. Each pronoun must match the verb conjugation. For example, when using the verb “to be,” the conjugation changes. When using the pronoun “I,” the verb form becomes “am”: “I am young.” When using the pronoun “she,” the verb form becomes “is”: “She is young.”
+</p>
+
+<p>
+Examples:
+<b>I am</b>,
+<b>You are</b>,
+<b>He is</b>,
+<b>She is</b>,
+<b>It is</b>,
+<b>We are</b>,
+<b>They are</b>
+</p>
+</div>
+
+<form id="quizForm"></form>
+
+<button onclick="checkAnswers()" type="button">
+Submit Answers
+</button>
+
+<div class="result" id="resultBox">
+<h2>Your Score</h2>
+<div class="score" id="score"></div>
+<p id="message"></p>
+</div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+question:"Sarah is my best friend. _____ is very kind.",
+options:["He","She","They"],
+answer:"She"
+},
+
+{
+question:"My brother and I are students. _____ study English every day.",
+options:["We","They","He"],
+answer:"We"
+},
+
+{
+question:"The cat is sleeping. _____ is under the table.",
+options:["She","It","They"],
+answer:"It"
+},
+
+{
+question:"John is a doctor. _____ works at a hospital.",
+options:["He","She","We"],
+answer:"He"
+},
+
+{
+question:"My friends are playing football. _____ are in the field.",
+options:["He","They","It"],
+answer:"They"
+},
+
+{
+question:"_____ am happy today.",
+options:["I","He","She"],
+answer:"I"
+},
+
+{
+question:"Anna and Lisa are sisters. _____ live together.",
+options:["She","They","We"],
+answer:"They"
+},
+
+{
+question:"My father is a teacher. _____ teaches mathematics.",
+options:["He","It","They"],
+answer:"He"
+},
+
+{
+question:"The book is interesting. _____ belongs to my sister.",
+options:["It","He","They"],
+answer:"It"
+},
+
+{
+question:"Tom and I are classmates. _____ sit next to each other.",
+options:["We","They","He"],
+answer:"We"
+},
+
+{
+question:"Mary is absent today. _____ is sick.",
+options:["He","She","They"],
+answer:"She"
+},
+
+{
+question:"The dogs are barking. _____ are very noisy.",
+options:["They","It","She"],
+answer:"They"
+},
+
+{
+question:"_____ are my best friend.",
+options:["You","He","She"],
+answer:"You"
+},
+
+{
+question:"My mother and father are at home. _____ are watching TV.",
+options:["We","They","He"],
+answer:"They"
+},
+
+{
+question:"_____ am a university student.",
+options:["I","You","They"],
+answer:"I"
+}
+
+];
+const form = document.getElementById("quizForm");
+
+questions.forEach((q,index)=>{
+
+let optionsHTML = "";
+
+q.options.forEach(option=>{
+
+optionsHTML += `
+<label class="option">
+<input type="radio" name="q${index}" value="${option}">
+ ${option}
+</label>
+`;
+
+});
+
+form.innerHTML += `
+<div class="quiz-card">
+
+<div class="question">
+${index + 1}. ${q.question}
+</div>
+
+${optionsHTML}
+
+<div class="answer" id="answer${index}">
+</div>
+
+</div>
+`;
+
+});
+
+function checkAnswers(){
+
+let score = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(`input[name="q${index}"]:checked`);
+
+const answerBox =
+document.getElementById(`answer${index}`);
+
+if(selected && selected.value === q.answer){
+
+score++;
+
+answerBox.innerHTML = "✓ Correct";
+answerBox.className = "answer correct";
+
+}else{
+
+answerBox.innerHTML =
+`✗ Correct answer: ${q.answer}`;
+
+answerBox.className = "answer wrong";
+}
+
+answerBox.style.display = "block";
+
+});
+
+const percent =
+Math.round(score / questions.length * 100);
+
+document.getElementById("score").innerHTML =
+`${score} / ${questions.length}`;
+
+let message = "";
+
+if(percent >= 90){
+message = "🏆 Excellent!";
+}
+else if(percent >= 70){
+message = "🎓 Good Job!";
+}
+else if(percent >= 50){
+message = "📘 Keep Practicing!";
+}
+else{
+message = "📚 Study Prepositions of Time Again!";
+}
+
+document.getElementById("message").innerHTML =
+`${percent}% - ${message}`;
+
+document.getElementById("resultBox").style.display =
+"block";
+
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+});
+
+}
+
+</script>
+
+</body>
+</html>
